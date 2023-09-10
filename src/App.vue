@@ -16,7 +16,9 @@ onMounted(() => {
 
 watch(
   store,
-  (state) => localStorage.setItem("piniaState", JSON.stringify(state.$state)),
+  (store) => {
+    localStorage.setItem("piniaState", JSON.stringify(store.$state));
+  },
   { deep: true }
 );
 </script>

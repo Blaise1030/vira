@@ -1,6 +1,6 @@
 <template>
   <div
-    class="border-b flex flex-row px-6 sticky items-center top-0 left-0 h-16 md:h-20 justify-between"
+    class="border-b flex flex-row px-4 md:px-6 sticky items-center top-0 left-0 h-16 md:h-20 justify-between"
   >
     <div class="flex md:flex-row space-x-4 items-center">
       <v-icon
@@ -19,7 +19,6 @@
         hide-details
         clearable
       />
-      <!-- </v-sheet> -->
       <div class="hidden md:flex flex-row space-x-2">
         <v-menu :close-on-content-click="false" transition="slide-y-transition">
           <template v-slot:activator="{ props }">
@@ -56,25 +55,33 @@
               Date
             </v-btn>
           </template>
-          <v-list density="compact" class="min-w-[150px] mt-2" lines="one">
-            <v-list-item
-              v-for="(item, index) in categories"
-              density="compact"
-              :key="index"
+          <v-card class="py-2 pb-4 overflow-hidden w-fit my-2">
+            <v-date-picker
+              :model-value="store.boardSearchDateState.map((a) => new Date(a))"
+              @update:model-value="store.setDateRange($event)"
+              :min="new Date()"
+              color="primary"
+              class="m-auto"
+              elevation="0"
+              hide-actions
+              rounded="sm"
+              landscape
+              multiple
+            ></v-date-picker>
+            <v-btn
+              class="ml-4 tracking-tighter text-black"
+              @click="store.setDateRange([])"
+              color="grey-lighten-4"
+              variant="flat"
             >
-              <v-checkbox
-                :label="`${item.title}`"
-                density="compact"
-                color="primary"
-                hide-details
-              ></v-checkbox>
-            </v-list-item>
-          </v-list>
+              Clear Filter
+            </v-btn>
+          </v-card>
         </v-menu>
       </div>
-      <add-task></add-task>
     </div>
-    <v-avatar icon="$vuetify" color="primary"></v-avatar>
+
+    <add-task></add-task>
   </div>
 </template>
 
@@ -84,6 +91,7 @@ import { useAppStore } from "@/store/app";
 import AddTask from "./AddTask.vue";
 import { ref } from "vue";
 const store = useAppStore();
+import dayjs from "dayjs";
 
 const categories = ref([
   { id: "1", title: "Bug" },

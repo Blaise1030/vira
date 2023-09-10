@@ -1,10 +1,12 @@
 <template>
   <v-card
-    :class="`bg-white mb-3 ${
-      highlight ? '' : 'opacity-30'
-    } cursor-grab active:cursor-grabbing`"
+    class="bg-white mb-3 cursor-grab active:cursor-grabbing"
     @click="$emit('click', $event)"
     elevation="1"
+    :class="{
+      'opacity-30': !highlight,
+      hidden: hideCard,
+    }"
   >
     <v-img v-if="Boolean(media)" :src="media" height="120px" cover></v-img>
     <div class="flex flex-col space-y-1 p-3">
@@ -43,6 +45,7 @@ defineProps({
     required: true,
   },
   highlight: Boolean,
+  hideCard: Boolean,
   description: String,
   title: String,
   media: String,

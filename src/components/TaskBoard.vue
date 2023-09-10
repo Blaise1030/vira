@@ -1,6 +1,6 @@
 <template>
   <v-sheet
-    class="h-100 bg-grey-lighten-4 overflow-auto space-y-2 w-[300px] hide-scrollbar cursor-grab active:cursor-grabbing"
+    class="bg-grey-lighten-4 overflow-auto space-y-2 w-[300px] hide-scrollbar cursor-grab active:cursor-grabbing h-full"
     rounded="lg"
   >
     <div
@@ -47,6 +47,7 @@
         <template #item="{ element }">
           <task-card
             :highlight="store.getHighlightCards.includes(element.id)"
+            :hideCard="store.getHideCards.includes(element.id)"
             :description="element.description"
             :media="element?.media || ''"
             :title="element.title"
