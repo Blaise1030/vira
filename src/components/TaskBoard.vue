@@ -33,7 +33,7 @@
           ]"
         />
       </v-menu>
-      <div v-else class="h-7"></div>
+      <div v-else class="h-8"></div>
     </div>
     <div class="flex flex-col px-3 pb-4 h-full">
       <draggable
@@ -46,14 +46,21 @@
       >
         <template #item="{ element }">
           <task-card
+            @click="$router.push({ path: '/', query: { task: element.id } })"
             :highlight="store.getHighlightCards.includes(element.id)"
             :hideCard="store.getHideCards.includes(element.id)"
             :description="element.description"
-            :media="element?.media || ''"
             :title="element.title"
             :id="element.id"
+            :media="
+              element?.media?.filter(({ fileType }) =>
+                fileType.includes('image')
+              )[0]?.fileUrl || ''
+            "
             :labels="
-              store?.taskCategories?.filter(({ id }) => id === element.category)
+              store?.taskCategories?.filter(({ id }) =>
+                element.category.includes(id)
+              )
             "
           />
         </template>

@@ -9,10 +9,15 @@ type TTask = {
   id: string;
   title: string;
   description: string;
-  media: string;
-  category: string;
+  category: string[];
   boardId: string;
   targetDate: string;
+  media: {
+    fileUrl: string;
+    fileName: string;
+    fileType: string;
+    fileId: string;
+  }[];
 };
 
 export const useAppStore = defineStore("app", {
@@ -23,6 +28,15 @@ export const useAppStore = defineStore("app", {
     removeBoard(id: string) {
       this.board = this.board.filter((board) => board.id !== id);
     },
+    updateTasks(newTask: TTask) {
+      this.board = this.board.map((board) => {
+        if (board.id !== newTask.boardId) return board;
+        return {
+          ...board,
+          child: board.child.map((c) => (c.id === newTask.id ? newTask : c)),
+        };
+      }) as any;
+    },
     addTasks(newTask: Omit<TTask, "id">) {
       this.board = this.board.map((board) => {
         if (board.id !== newTask.boardId) return board;
@@ -30,14 +44,7 @@ export const useAppStore = defineStore("app", {
         this.ticketRunningNumber += 1;
         return {
           ...board,
-          child: [
-            ...board.child,
-            {
-              ...newTask,
-              media: "https://picsum.photos/200/300",
-              id: `VIRA-${newNumber}`,
-            },
-          ],
+          child: [...board.child, { ...newTask, id: `VIRA-${newNumber}` }],
         };
       }) as any;
     },
@@ -54,19 +61,24 @@ export const useAppStore = defineStore("app", {
     },
   },
   getters: {
+    getTask: (state) => (taskID: string) =>
+      state?.board
+        .flatMap(({ child }) => child)
+        .filter(({ id }) => id === taskID)[0],
     getBoardTitle: (state) => Object.keys(state.board),
     getHideCards: (state) => {
-      return state.board
-        .flatMap(({ child }) => child)
-        .filter(({ targetDate }) => {
-          const search = state.boardSearchDateState;
-          if (search.length === 0) return false;
-          return !dayjs(targetDate).isBetween(
-            dayjs(search[0]),
-            dayjs(search[1])
-          );
-        })
-        .map((a) => (a as any)?.id);
+      const child = state.board.flatMap(({ child }) => child);
+      const hideDate = child.filter(({ targetDate }) => {
+        const search = state.boardSearchDateState;
+        if (search.length === 0) return false;
+        return !dayjs(targetDate).isBetween(dayjs(search[0]), dayjs(search[1]));
+      });
+      const hideCategory = child.filter(({ category }) => {
+        const search = state.boardSearchCategoryState;
+        if (search.length === 0) return false;
+        return !search.every((cat: string) => category.includes(cat));
+      });
+      return [...hideDate, ...hideCategory].map((a) => (a as any)?.id);
     },
     getHighlightCards: (state) => {
       const cards = state.board.flatMap(({ child }) => child);
@@ -89,14 +101,17 @@ export const useAppStore = defineStore("app", {
     },
   },
   state: () => ({
-    ticketRunningNumber: 1,
+    boardSearchCategoryState: [],
     boardSearchDateState: [],
+    ticketRunningNumber: 1,
     boardSearchState: "",
     taskCategories: [
-      { id: "231231", title: "Bug", color: "red" },
-      { id: "23123", title: "Task", color: "green" },
-      { id: "123123", title: "Story", color: "primary" },
-      { id: "223", title: "Epic", color: "secondary" },
+      { id: "231231", title: "Highest Priority", color: "red" },
+      { id: "23123", title: "Medium Priority", color: "green" },
+      { id: "123123", title: "Lowest Priority", color: "primary" },
+      { id: "121", title: "Hard", color: "red" },
+      { id: "233", title: "Moderate", color: "green" },
+      { id: "122", title: "Easy", color: "primary" },
     ],
     board: [
       {

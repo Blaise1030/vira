@@ -27,6 +27,7 @@
         <add-task-board></add-task-board>
       </div>
     </v-container>
+    <edit-task-modal></edit-task-modal>
   </v-app>
 </template>
 
@@ -37,6 +38,8 @@ import draggable from "vuedraggable";
 import TaskBoard from "@/components/TaskBoard.vue";
 //@ts-ignore
 import AddTaskBoard from "@/components/AddTaskBoard.vue";
+//@ts-ignore
+import EditTaskModal from "@/components/EditTaskModal.vue";
 //@ts-ignore
 import TaskNavbar from "@/components/TaskNavbar.vue";
 import { useAppStore } from "@/store/app";

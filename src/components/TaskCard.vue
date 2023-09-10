@@ -14,18 +14,21 @@
       <p class="text-no-wrap text-sm text-truncate text-gray-400">
         {{ description }}
       </p>
+      <div class="flex flex-wrap flex-row space-x-1">
+        <div v-for="(label, index) in labels" :key="index">
+          <v-chip
+            size="x-small"
+            :color="label.color"
+            text-color="white"
+            variant="flat"
+            label
+          >
+            {{ label.title }}</v-chip
+          >
+        </div>
+      </div>
+
       <div class="flex flex-row space-x-2 items-center pt-1">
-        <v-chip
-          v-for="(label, index) in labels"
-          :key="index"
-          size="x-small"
-          :color="label.color"
-          text-color="white"
-          variant="flat"
-          label
-        >
-          {{ label.title }}</v-chip
-        >
         <p class="text-xs font-semibold text-gray-400">{{ id }}</p>
         <v-avatar
           icon="$vuetify"
@@ -41,7 +44,7 @@
 <script lang="ts" setup>
 defineProps({
   labels: {
-    type: Array<{ id: String; title: String; color: String }>,
+    type: Array<{ id: string; title: string; color: string }>,
     required: true,
   },
   highlight: Boolean,
