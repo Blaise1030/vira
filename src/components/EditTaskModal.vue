@@ -91,7 +91,7 @@
                 )
               "
             />
-            <comments-section></comments-section>
+            <comments-section :viraID="fields.id"></comments-section>
           </div>
           <div
             class="flex flex-col space-y-2 col-span-5 md:col-span-2 h-fit sticky top-0 right-0"
@@ -159,7 +159,11 @@
                     <v-text-field
                       v-bind="props"
                       :rules="formValidation.taskCompletionDate"
-                      :model-value="fields.taskCompletionDate[0]"
+                      :model-value="
+                        dayjs(fields.taskCompletionDate[0]).format(
+                          'DD MMMM YYYY'
+                        )
+                      "
                       placeholder="Target Due Date"
                       variant="solo-filled"
                       density="compact"

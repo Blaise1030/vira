@@ -43,6 +43,7 @@
         itemKey="id"
         :animation="300"
         ghostClass="ghost"
+        @click="store.syncTasks()"
       >
         <template #item="{ element }">
           <task-card

@@ -22,6 +22,17 @@ type TTask = {
 
 export const useAppStore = defineStore("app", {
   actions: {
+    syncTasks() {
+      this.board = this.board.map((b) => {
+        return {
+          ...b,
+          child: b.child.map((c) => ({
+            ...c,
+            boardId: b.id,
+          })),
+        };
+      });
+    },
     removeTask(id: string) {
       this.board = this.board.map((board) => {
         return {
@@ -37,8 +48,26 @@ export const useAppStore = defineStore("app", {
       this.board = this.board.filter((board) => board.id !== id);
     },
     updateTasks(newTask: TTask) {
+      const current = this?.board
+        .flatMap(({ child }) => child)
+        .filter(({ id }) => id === newTask.id)[0];
+
       this.board = this.board.map((board) => {
-        if (board.id !== newTask.boardId) return board;
+        if (newTask.boardId === current.boardId) return board;
+        if (board.id === current.boardId)
+          return {
+            ...board,
+            child: board.child.filter(({ id }) => id !== newTask.id),
+          };
+        if (newTask.boardId === board.id)
+          return {
+            ...board,
+            child: [newTask, ...board.child],
+          };
+        return board;
+      });
+
+      this.board = this.board.map((board) => {
         return {
           ...board,
           child: board.child.map((c) => (c.id === newTask.id ? newTask : c)),

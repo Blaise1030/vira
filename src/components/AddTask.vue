@@ -117,7 +117,11 @@
                 <v-text-field
                   v-bind="props"
                   :rules="formValidation.taskCompletionDate"
-                  v-model="formFields.taskCompletionDate"
+                  :model-value="
+                    dayjs(formFields.taskCompletionDate[0]).format(
+                      'DD MMMM YYYY'
+                    )
+                  "
                   placeholder="Target Due Date"
                   variant="solo-filled"
                   density="compact"
