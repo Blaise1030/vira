@@ -130,7 +130,8 @@
               </template>
               <v-card class="py-2 overflow-hidden w-fit my-2">
                 <v-date-picker
-                  v-model="formFields.taskCompletionDate"
+                  :model-value="formFields.taskCompletionDate"
+                  @update:model-value="updateDate($event)"
                   :min="dayjs().subtract(1, 'day').toDate()"
                   color="primary"
                   class="m-auto"
@@ -177,7 +178,7 @@
 
 
 <script setup lang="ts">
-import { useAppStore } from "@/store/app";
+import { useAppStore } from "../store/app";
 // @ts-ignore
 import FileUploader from "./FileUploader.vue";
 import dayjs from "dayjs";
@@ -189,12 +190,12 @@ const dateOpen = ref(false);
 const scrollPosition = ref([false, false]);
 
 const defaultFormValue = {
+  taskCompletionDate: [new Date()],
+  taskDescription: "",
+  taskFiles: [],
+  taskTitle: "",
   taskType: [],
   board: "",
-  taskTitle: "",
-  taskDescription: "",
-  taskCompletionDate: "",
-  taskFiles: [],
 };
 
 const isRequired = (value: any) => {
@@ -202,6 +203,7 @@ const isRequired = (value: any) => {
   return "Field Is Required";
 };
 
+const formFields = ref(defaultFormValue);
 const formValidation = {
   taskCompletionDate: [isRequired],
   taskType: [isRequired],
@@ -210,7 +212,6 @@ const formValidation = {
   taskDescription: [],
   taskFiles: [],
 };
-const formFields = ref(defaultFormValue);
 
 function closeModal() {
   showModal.value = false;
@@ -220,15 +221,19 @@ function closeModal() {
     board: "",
     taskTitle: "",
     taskDescription: "",
-    taskCompletionDate: "",
+    taskCompletionDate: [new Date()],
     taskFiles: [],
   };
+}
+
+function updateDate(event: any) {
+  formFields.value.taskCompletionDate = [event];
 }
 
 async function onSubmit(e: any) {
   if (!(await e).valid) return;
   store.addTasks({
-    targetDate: new Date(formFields.value.taskCompletionDate).toJSON(),
+    targetDate: formFields.value.taskCompletionDate[0].toJSON(),
     category: formFields.value.taskType.map((t: any) => t.id),
     description: formFields.value.taskDescription,
     title: formFields.value.taskTitle,

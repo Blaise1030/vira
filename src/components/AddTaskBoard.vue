@@ -51,7 +51,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useAppStore } from "@/store/app";
+import { useAppStore } from "../store/app";
 import { ref } from "vue";
 const dialog = ref(false);
 const boardName = ref("");

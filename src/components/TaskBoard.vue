@@ -76,7 +76,7 @@
 import TaskCard from "./TaskCard.vue";
 //@ts-ignore
 import draggable from "vuedraggable";
-import { useAppStore } from "@/store/app";
+import { useAppStore } from "../store/app";
 
 const props = defineProps({
   title: String,

@@ -10,7 +10,7 @@
       <div class="flex flex-row h-100 space-x-2 w-fit pr-4">
         <draggable
           class="flex flex-row space-x-2 h-100"
-          :list="store.board"
+          :list="store.getBoards"
           group="items"
           itemKey="id"
           :animation="300"
@@ -35,14 +35,14 @@
 //@ts-ignore
 import draggable from "vuedraggable";
 //@ts-ignore
-import TaskBoard from "@/components/TaskBoard.vue";
+import TaskBoard from "../components/TaskBoard.vue";
 //@ts-ignore
-import AddTaskBoard from "@/components/AddTaskBoard.vue";
+import AddTaskBoard from "../components/AddTaskBoard.vue";
 //@ts-ignore
-import EditTaskModal from "@/components/EditTaskModal.vue";
+import EditTaskModal from "../components/EditTaskModal.vue";
 //@ts-ignore
-import TaskNavbar from "@/components/TaskNavbar.vue";
-import { useAppStore } from "@/store/app";
+import TaskNavbar from "../components/TaskNavbar.vue";
+import { useAppStore } from "../store/app";
 
 const store = useAppStore();
 </script>

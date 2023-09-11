@@ -22,6 +22,14 @@ type TTask = {
 
 export const useAppStore = defineStore("app", {
   actions: {
+    removeTask(id: string) {
+      this.board = this.board.map((board) => {
+        return {
+          ...board,
+          child: board.child.filter((c) => c.id !== id),
+        };
+      }) as any;
+    },
     setDateRange(a: any) {
       this.boardSearchDateState = a;
     },
@@ -61,6 +69,7 @@ export const useAppStore = defineStore("app", {
     },
   },
   getters: {
+    getBoards: (state) => state.board,
     getTask: (state) => (taskID: string) =>
       state?.board
         .flatMap(({ child }) => child)

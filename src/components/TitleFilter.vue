@@ -13,6 +13,6 @@
 
 
 <script setup lang="ts">
-import { useAppStore } from "@/store/app";
+import { useAppStore } from "../store/app";
 const store = useAppStore();
 </script>
